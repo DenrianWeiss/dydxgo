@@ -55,3 +55,10 @@ func (e *Exchange) Withdraw(transact *bind.TransactOpts) (*types.Transaction, er
 	tokenIdUint, _ := big.NewInt(0).SetString(tokenId[e.NetworkId], 16)
 	return e.exchange.Withdraw(transact, e.StarkKeyToUint256(), tokenIdUint)
 }
+
+func (e *Exchange) RegisterUser(signature []byte, transact *bind.TransactOpts) (*types.Transaction, error) {
+	if transact.Signer == nil {
+		transact.Signer = e.ethSigner
+	}
+	return e.exchange.RegisterUser(transact, e.Address, e.StarkKeyToUint256(), signature)
+}

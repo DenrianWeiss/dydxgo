@@ -72,6 +72,6 @@ func (b *OnBoarding) SignMessage(d apitypes.TypedData) ([]byte, error) {
 		log.Panic("failed to encode typed data.")
 	}
 	log.Printf("Signing Typed Data %x", msg)
-	res, err := b.signer(sig)
+	res, err := b.CryptoSigner(sig)
 	return res, err
 }

@@ -17,7 +17,7 @@ import (
 
 type OnBoarding struct {
 	base.BaseClient
-	signer signer.CryptoSigner
+	CryptoSigner signer.CryptoSigner
 }
 
 func (b *OnBoarding) DeriveStarkKey(ethereumAddress string) string {

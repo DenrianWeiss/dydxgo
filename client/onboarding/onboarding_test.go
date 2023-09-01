@@ -29,7 +29,7 @@ func TestOnBoarding_SignMessage(t *testing.T) {
 		BaseClient: base.BaseClient{
 			NetworkId: constants.NetworkIdGoerli,
 		},
-		signer: signerFn,
+		CryptoSigner: signerFn,
 	}
 	msg := ob.CreateMessage(map[string]interface{}{"action": constants.OffChainKeyDerivationAction})
 	hash, err := ob.HashMessage(msg)

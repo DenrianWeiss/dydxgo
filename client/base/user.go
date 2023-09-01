@@ -1,15 +1,16 @@
 package base
 
 import (
+	"github.com/denrianweiss/dydxgo/types"
 	"github.com/ethereum/go-ethereum/common"
 	"math/big"
 )
 
 type BaseUser struct {
 	BaseClient
-	Address         common.Address
-	StarkPublicKey  []byte
-	StarkPrivateKey []byte
+	Address           common.Address
+	StarkPrivateKey   string
+	ApiKeyCredentials *types.ApiKeyCredentials
 }
 
 func (b *BaseUser) StarkKeyToUint256() *big.Int {
