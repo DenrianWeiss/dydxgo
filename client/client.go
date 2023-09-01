@@ -38,7 +38,7 @@ type Client struct {
 	Public     *public.Public
 }
 
-func New(options Options) {
+func New(options Options) Client {
 	// Fill Basic Info First.
 	clientInstance := Client{}
 	clientInstance.Address = common.HexToAddress(options.DefaultEthereumAddress)
@@ -88,4 +88,5 @@ func New(options Options) {
 		RateLimit:  nil,
 		Logger:     options.Logger,
 	}
+	return clientInstance
 }
