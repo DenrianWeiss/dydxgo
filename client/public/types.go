@@ -98,6 +98,17 @@ func (p *Book) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type OrderBookResponse struct {
+	Asks []struct {
+		Size  string `json:"size"`
+		Price string `json:"price"`
+	} `json:"asks"`
+	Bids []struct {
+		Size  string `json:"size"`
+		Price string `json:"price"`
+	} `json:"bids"`
+}
+
 type CandlesResponse struct {
 	Candles []Candle `json:"candles"`
 }

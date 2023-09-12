@@ -63,6 +63,19 @@ func (p *Public) GetCandles(param *CandlesParam) (*CandlesResponse, error) {
 	return t, nil
 }
 
+func (p *Public) GetOrderBook(marketID string) (*OrderBookResponse, error) {
+	res, err := p.get(fmt.Sprintf("orderbook/%s", marketID), map[string][]string{})
+	if err != nil {
+		return nil, err
+	}
+	t := &OrderBookResponse{}
+	if err := json.Unmarshal(res, t); err != nil {
+		return nil, err
+	}
+
+	return t, nil
+}
+
 func (p *Public) GetHistoricalFunding(param *HistoricalFundingsParam) (*HistoricalFundingsResponse, error) {
 	u, err := query.Values(param)
 	if err != nil {
