@@ -4,6 +4,7 @@ import (
 	"github.com/denrianweiss/dydxgo/client/ethereum/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 	"math/big"
 )
 
@@ -25,8 +26,8 @@ func (t *Token) New(e ETHClient) *Token {
 	return t
 }
 
-func (t *Token) SetAllowance(amount *big.Int, transact *bind.TransactOpts) {
-
+func (t *Token) SetAllowance(amount *big.Int, transact *bind.TransactOpts) (*types.Transaction, error) {
+	return t.token.Approve(transact, common.HexToAddress(exchangeAddress[t.NetworkId]), amount)
 }
 
 func (t *Token) GetAllowance() (*big.Int, error) {
