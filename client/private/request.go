@@ -143,7 +143,32 @@ func (p *Private) GetOrderById(orderId string) (*OrderResponse, error) {
 	return result, nil
 }
 
-func (p *Private) WithdrawFast(param *WithdrawalParam) (*WithdrawResponse, error) {
+func (p *Private) Withdraw(param *WithdrawalParam) (*WithdrawResponse, error) {
+	signature, err := starkex.WithdrawSign(p.StarkPrivateKey, starkex.WithdrawSignParam{
+		NetworkId:   int(p.NetworkId),
+		ClientId:    param.ClientID,
+		PositionId:  int64(utils.ToFloat(param.PositionId)),
+		HumanAmount: param.Amount,
+		Expiration:  param.Expiration,
+	})
+	if err != nil {
+		return nil, errors.New("sign error")
+	}
+	param.Signature = signature
+	res, err := p.post("withdrawals", param)
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := &WithdrawResponse{}
+	if err := json.Unmarshal(res, result); err != nil {
+		return nil, errors.New("json parser error")
+	}
+	return result, nil
+}
+
+func (p *Private) WithdrawFast(param *WithdrawalFastParam) (*WithdrawResponse, error) {
 	signature, err := starkex.WithdrawSign(p.StarkPrivateKey, starkex.WithdrawSignParam{
 		NetworkId:   int(p.NetworkId),
 		ClientId:    param.ClientID,

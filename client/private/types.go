@@ -234,6 +234,16 @@ type Withdrawal struct {
 }
 
 type WithdrawalParam struct {
+	ClientID string `json:"clientId"`
+	Amount   string `json:"amount"`
+	Asset    string `json:"asset"`
+
+	PositionId string `json:"positionId"`
+	Expiration string `json:"expiration"`
+	Signature  string `json:"signature"`
+}
+
+type WithdrawalFastParam struct {
 	ClientID     string `json:"clientId"`
 	ToAddress    string `json:"toAddress"`
 	CreditAsset  string `json:"creditAsset"`
