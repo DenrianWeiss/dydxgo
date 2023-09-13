@@ -73,5 +73,10 @@ func (b *OnBoarding) SignMessage(d apitypes.TypedData) ([]byte, error) {
 	}
 	log.Printf("Signing Typed Data %x", msg)
 	res, err := b.CryptoSigner(sig)
+	// Fix Signature
+	lastByte := res[len(res)-1]
+	if lastByte <= 2 {
+		res[len(res)-1] = lastByte + 27
+	}
 	return res, err
 }
