@@ -214,7 +214,7 @@ type OrderQueryParam struct {
 }
 
 type WithdrawResponse struct {
-	Withdrawal []Withdrawal `json:"withdrawal"`
+	Withdrawal Withdrawal `json:"withdrawal"`
 }
 
 type Withdrawal struct {
