@@ -144,7 +144,7 @@ type FastWithdrawParam struct {
 }
 
 type FastWithdrawResponse struct {
-	LiquidityProviders map[string]FastWithdrawParam `json:"liquidityProviders"`
+	LiquidityProviders map[string]FastWithdrawLiquidity `json:"liquidityProviders"`
 }
 
 type FastWithdrawLiquidity struct {
