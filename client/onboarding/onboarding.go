@@ -21,7 +21,7 @@ type OnBoarding struct {
 }
 
 func (b *OnBoarding) DeriveStarkKey(ethereumAddress string) string {
-	message := b.CreateMessage(map[string]interface{}{"action": constants.OffChainOnboardingAction})
+	message := b.CreateMessage(map[string]interface{}{"action": constants.OffChainKeyDerivationAction})
 	sig, err := b.SignMessage(message)
 	if err != nil {
 		log.Panic(err)
@@ -35,7 +35,7 @@ func (b *OnBoarding) DeriveStarkKey(ethereumAddress string) string {
 }
 
 func (b *OnBoarding) RecoverDefaultApiCredentials(ethereumAddress string) *types.ApiKeyCredentials {
-	message := b.CreateMessage(map[string]interface{}{"action": constants.OffChainKeyDerivationAction})
+	message := b.CreateMessage(map[string]interface{}{"action": constants.OffChainOnboardingAction})
 	sig, err := b.SignMessage(message)
 	if err != nil {
 		log.Panic(err)
