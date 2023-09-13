@@ -77,7 +77,7 @@ func New(options Options) Client {
 		BaseUser:   clientInstance.BaseUser,
 		Host:       options.Host,
 		HttpClient: options.HttpClient,
-		RateLimit:  nil,
+		RateLimit:  &types.RateLimit{},
 		Logger:     options.Logger,
 	}
 
@@ -85,7 +85,7 @@ func New(options Options) Client {
 		BaseUser:   clientInstance.BaseUser,
 		Host:       options.Host,
 		HttpClient: options.HttpClient,
-		RateLimit:  nil,
+		RateLimit:  &types.RateLimit{},
 		Logger:     options.Logger,
 	}
 	return clientInstance
