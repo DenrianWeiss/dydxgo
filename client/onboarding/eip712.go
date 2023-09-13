@@ -78,5 +78,6 @@ func (b *OnBoarding) SignMessage(d apitypes.TypedData) ([]byte, error) {
 	if lastByte <= 2 {
 		res[len(res)-1] = lastByte + 27
 	}
+	res = append(res, 0)
 	return res, err
 }
