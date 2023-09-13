@@ -367,7 +367,30 @@ type Transfer struct {
 	CreatedAt       time.Time `json:"createdAt"`
 }
 
-type TransfersParam struct {
+type TransferQueryParam struct {
+	Type              string `url:"type,omitempty"`
+	Limit             int64  `url:"limit,omitempty"`
+	CreatedBeforeOrAt string `url:"createdBeforeOrAt,omitempty"`
+}
+
+type TransferQueryResponse struct {
+	Transfer []TransferList `json:"transfer"`
+}
+
+type TransferList struct {
+	Id              string    `json:"id"`
+	Type            string    `json:"type"`
+	DebitAsset      string    `json:"debitAsset"`
+	CreditAsset     string    `json:"creditAsset"`
+	DebitAmount     string    `json:"debitAmount"`
+	CreditAmount    string    `json:"creditAmount"`
+	TransactionHash string    `json:"transactionHash"`
+	Status          string    `json:"status"`
+	CreatedAt       string    `json:"createdAt"`
+	ConfirmedAt     time.Time `json:"confirmedAt"`
+	ClientId        string    `json:"clientId"`
+	FromAddress     string    `json:"fromAddress"`
+	ToAddress       string    `json:"toAddress"`
 }
 
 func (o OrderQueryParam) ToParams() url.Values {

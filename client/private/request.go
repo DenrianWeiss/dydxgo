@@ -256,3 +256,17 @@ func (p *Private) GetTradingRewards(param *TradingRewardsParam) (*TradingRewards
 	}
 	return result, nil
 }
+
+func (p *Private) GetTransfers(param *TransferQueryParam) (*TransferQueryResponse, error) {
+	u := utils.ToValues(param)
+	res, err := p.get("transfers", u)
+	if err != nil {
+		return nil, err
+	}
+
+	result := &TransferQueryResponse{}
+	if err := json.Unmarshal(res, result); err != nil {
+		return nil, errors.New("json parser error")
+	}
+	return result, nil
+}
