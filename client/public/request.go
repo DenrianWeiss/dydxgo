@@ -76,6 +76,23 @@ func (p *Public) GetOrderBook(marketID string) (*OrderBookResponse, error) {
 	return t, nil
 }
 
+func (p *Public) GetFastWithdrawals(param *FastWithdrawParam) (*FastWithdrawResponse, error) {
+	u, err := query.Values(param)
+	if err != nil {
+		return nil, errors.New("error when changed struct to query")
+	}
+
+	res, err := p.get("fast-withdrawals", u)
+	if err != nil {
+		return nil, err
+	}
+	t := &FastWithdrawResponse{}
+	if err := json.Unmarshal(res, t); err != nil {
+		return nil, err
+	}
+	return t, nil
+}
+
 func (p *Public) GetHistoricalFunding(param *HistoricalFundingsParam) (*HistoricalFundingsResponse, error) {
 	u, err := query.Values(param)
 	if err != nil {

@@ -137,6 +137,26 @@ type CandlesParam struct {
 	Limit int `url:"limit,omitempty"`
 }
 
+type FastWithdrawParam struct {
+	CreditAsset  string `url:"creditAsset,omitempty"`
+	CreditAmount string `url:"creditAmount,omitempty"`
+	DebitAmount  string `url:"debitAmount,omitempty"`
+}
+
+type FastWithdrawResponse struct {
+	LiquidityProviders map[string]FastWithdrawParam `json:"liquidityProviders"`
+}
+
+type FastWithdrawLiquidity struct {
+	AvailableFunds string `json:"availableFunds"`
+	StarkKey       string `json:"starkKey"`
+	Quote          struct {
+		CreditAsset  string `json:"creditAsset"`
+		CreditAmount string `json:"creditAmount"`
+		DebitAmount  string `json:"debitAmount"`
+	} `json:"quote"`
+}
+
 type HistoricalFundingsResponse struct {
 	HistoricalFundings []HistoricalFunding `json:"historicalFunding"`
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/denrianweiss/dydxgo/utils"
 	"github.com/yanue/starkex"
 	"net/url"
+	"strconv"
 )
 
 func (p *Private) GetUsers() (*UsersResponse, error) {
@@ -168,14 +169,21 @@ func (p *Private) Withdraw(param *WithdrawalParam) (*WithdrawResponse, error) {
 	return result, nil
 }
 
-func (p *Private) WithdrawFast(param *WithdrawalFastParam) (*WithdrawResponse, error) {
-	signature, err := starkex.WithdrawSign(p.StarkPrivateKey, starkex.WithdrawSignParam{
-		NetworkId:   int(p.NetworkId),
-		ClientId:    param.ClientID,
-		PositionId:  int64(utils.ToFloat(param.LpPositionId)),
-		HumanAmount: param.CreditAmount,
-		Expiration:  param.Expiration,
+func (p *Private) WithdrawFast(param *WithdrawalFastParam, lpStarkKey string, positionId string) (*WithdrawResponse, error) {
+	convertedId, _ := strconv.Atoi(positionId)
+	convertedLpId, _ := strconv.Atoi(param.LpPositionId)
+	signature, err := starkex.TransferSign(p.StarkPrivateKey, starkex.TransferSignParam{
+		NetworkId:          int(p.NetworkId),
+		SenderPositionId:   int64(convertedId),
+		ReceiverPositionId: int64(convertedLpId),
+		ReceiverPublicKey:  lpStarkKey,
+		ReceiverAddress:    param.ToAddress,
+		CreditAmount:       param.CreditAmount,
+		DebitAmount:        param.DebitAmount,
+		Expiration:         param.Expiration,
+		ClientId:           param.ClientID,
 	})
+
 	if err != nil {
 		return nil, errors.New("sign error")
 	}
