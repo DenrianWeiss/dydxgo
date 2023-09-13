@@ -26,7 +26,7 @@ func (b *OnBoarding) DeriveStarkKey(ethereumAddress string) string {
 	if err != nil {
 		log.Panic(err)
 	}
-	sha3 := solsha3.SoliditySHA3([]string{"uint256"}, fmt.Sprintf("0x%x", sig))
+	sha3 := solsha3.SoliditySHA3(fmt.Sprintf("0x%x", sig))
 	hashedSignature := hexutil.Encode(sha3)
 
 	privateKey, _ := new(big.Int).SetString(hashedSignature, 0)
