@@ -14,6 +14,6 @@ type BaseUser struct {
 }
 
 func (b *BaseUser) StarkKeyToUint256() *big.Int {
-	// todo
-	return big.NewInt(0)
+	bI, _ := big.NewInt(0).SetString(b.StarkPrivateKey, 16)
+	return bI
 }
