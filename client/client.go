@@ -13,6 +13,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type Options struct {
@@ -57,6 +58,9 @@ func New(options Options) Client {
 	} else {
 		clientInstance.StarkPrivateKey = options.StarkPrivateKey
 	}
+	// Remove 0x Prefix for private key
+	trimmed := strings.TrimPrefix(clientInstance.StarkPrivateKey, "0x")
+	clientInstance.StarkPrivateKey = trimmed
 	if options.ApiKeyCredentials == nil {
 		apiKey := clientInstance.OnBoarding.RecoverDefaultApiCredentials(clientInstance.Address.String())
 		clientInstance.ApiKeyCredentials = apiKey
