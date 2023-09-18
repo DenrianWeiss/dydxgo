@@ -33,3 +33,7 @@ func (t *Token) SetAllowance(amount *big.Int, transact *bind.TransactOpts) (*typ
 func (t *Token) GetAllowance() (*big.Int, error) {
 	return t.token.Allowance(&bind.CallOpts{}, t.Address, common.HexToAddress(exchangeAddress[t.NetworkId]))
 }
+
+func (t *Token) GetContract() *abi.Erc20 {
+	return t.token
+}
