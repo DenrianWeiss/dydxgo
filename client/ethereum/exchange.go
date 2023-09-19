@@ -6,6 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"math/big"
+	"strings"
 )
 
 var exchangeAddress = map[int64]string{
@@ -39,12 +40,12 @@ func (e *Exchange) Deposit(amount *big.Int, positionId *big.Int, transact *bind.
 	if transact.Signer == nil {
 		transact.Signer = e.ethSigner
 	}
-	tokenIdUint, _ := big.NewInt(0).SetString(tokenId[e.NetworkId], 16)
+	tokenIdUint, _ := big.NewInt(0).SetString(strings.TrimPrefix(tokenId[e.NetworkId], "0x"), 16)
 	return e.exchange.Deposit0(transact, e.StarkKeyToUint256(), tokenIdUint, positionId, amount)
 }
 
 func (e *Exchange) GetWithdrawalBalance() (*big.Int, error) {
-	tokenIdUint, _ := big.NewInt(0).SetString(tokenId[e.NetworkId], 16)
+	tokenIdUint, _ := big.NewInt(0).SetString(strings.TrimPrefix(tokenId[e.NetworkId], "0x"), 16)
 	return e.exchange.GetWithdrawalBalance(&bind.CallOpts{}, e.StarkKeyToUint256(), tokenIdUint)
 }
 
@@ -52,7 +53,7 @@ func (e *Exchange) Withdraw(transact *bind.TransactOpts) (*types.Transaction, er
 	if transact.Signer == nil {
 		transact.Signer = e.ethSigner
 	}
-	tokenIdUint, _ := big.NewInt(0).SetString(tokenId[e.NetworkId], 16)
+	tokenIdUint, _ := big.NewInt(0).SetString(strings.TrimPrefix(tokenId[e.NetworkId], "0x"), 16)
 	return e.exchange.Withdraw(transact, e.StarkKeyToUint256(), tokenIdUint)
 }
 

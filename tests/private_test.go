@@ -14,13 +14,14 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 )
 
 func GetSigner(privateKey string) signer.CryptoSigner {
 	curve := secp256k1.S256()
-	pkNumber, _ := big.NewInt(1).SetString(privateKey, 16)
+	pkNumber, _ := big.NewInt(1).SetString(strings.TrimPrefix(privateKey, "0x"), 16)
 	x, y := curve.ScalarBaseMult(pkNumber.Bytes())
 
 	pk := ecdsa.PrivateKey{
