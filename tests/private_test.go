@@ -2,12 +2,12 @@ package tests
 
 import (
 	"crypto/ecdsa"
+	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 	"github.com/denrianweiss/dydxgo/client"
 	"github.com/denrianweiss/dydxgo/client/private"
 	"github.com/denrianweiss/dydxgo/client/public"
 	"github.com/denrianweiss/dydxgo/signer"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"github.com/google/uuid"
 	"log"
 	"math/big"
