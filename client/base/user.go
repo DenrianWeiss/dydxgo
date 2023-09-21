@@ -14,7 +14,7 @@ type BaseUser struct {
 	ApiKeyCredentials *types.ApiKeyCredentials
 }
 
-func (b *BaseUser) StarkKeyToUint256() *big.Int {
-	bI, _ := big.NewInt(0).SetString(strings.TrimPrefix(b.StarkPrivateKey, "0x"), 16)
+func (b *BaseUser) PublicKeyToUint256(publicKey string) *big.Int {
+	bI, _ := big.NewInt(0).SetString(strings.TrimPrefix(publicKey, "0x"), 16)
 	return bI
 }

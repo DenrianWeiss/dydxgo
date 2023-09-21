@@ -36,30 +36,30 @@ func (e *Exchange) New(c ETHClient) *Exchange {
 	return e
 }
 
-func (e *Exchange) Deposit(amount *big.Int, positionId *big.Int, transact *bind.TransactOpts) (*types.Transaction, error) {
+func (e *Exchange) Deposit(amount *big.Int, publicKey string, positionId *big.Int, transact *bind.TransactOpts) (*types.Transaction, error) {
 	if transact.Signer == nil {
 		transact.Signer = e.ethSigner
 	}
 	tokenIdUint, _ := big.NewInt(0).SetString(strings.TrimPrefix(tokenId[e.NetworkId], "0x"), 16)
-	return e.exchange.Deposit0(transact, e.StarkKeyToUint256(), tokenIdUint, positionId, amount)
+	return e.exchange.Deposit0(transact, e.PublicKeyToUint256(publicKey), tokenIdUint, positionId, amount)
 }
 
-func (e *Exchange) GetWithdrawalBalance() (*big.Int, error) {
+func (e *Exchange) GetWithdrawalBalance(publicKey string) (*big.Int, error) {
 	tokenIdUint, _ := big.NewInt(0).SetString(strings.TrimPrefix(tokenId[e.NetworkId], "0x"), 16)
-	return e.exchange.GetWithdrawalBalance(&bind.CallOpts{}, e.StarkKeyToUint256(), tokenIdUint)
+	return e.exchange.GetWithdrawalBalance(&bind.CallOpts{}, e.PublicKeyToUint256(publicKey), tokenIdUint)
 }
 
-func (e *Exchange) Withdraw(transact *bind.TransactOpts) (*types.Transaction, error) {
+func (e *Exchange) Withdraw(publicKey string, transact *bind.TransactOpts) (*types.Transaction, error) {
 	if transact.Signer == nil {
 		transact.Signer = e.ethSigner
 	}
 	tokenIdUint, _ := big.NewInt(0).SetString(strings.TrimPrefix(tokenId[e.NetworkId], "0x"), 16)
-	return e.exchange.Withdraw(transact, e.StarkKeyToUint256(), tokenIdUint)
+	return e.exchange.Withdraw(transact, e.PublicKeyToUint256(publicKey), tokenIdUint)
 }
 
-func (e *Exchange) RegisterUser(signature []byte, transact *bind.TransactOpts) (*types.Transaction, error) {
+func (e *Exchange) RegisterUser(signature []byte, publicKey string, transact *bind.TransactOpts) (*types.Transaction, error) {
 	if transact.Signer == nil {
 		transact.Signer = e.ethSigner
 	}
-	return e.exchange.RegisterUser(transact, e.Address, e.StarkKeyToUint256(), signature)
+	return e.exchange.RegisterUser(transact, e.Address, e.PublicKeyToUint256(publicKey), signature)
 }
