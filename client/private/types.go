@@ -374,7 +374,7 @@ type TransferQueryParam struct {
 }
 
 type TransferQueryResponse struct {
-	Transfer []TransferList `json:"transfer"`
+	Transfer []TransferList `json:"transfers"`
 }
 
 type TransferList struct {
