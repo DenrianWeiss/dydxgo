@@ -9,6 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"log"
+	"os"
 	"testing"
 )
 
@@ -46,6 +47,34 @@ func TestOnBoarding_SignMessage(t *testing.T) {
 	}
 }
 
-func TestOnBoarding_DeriveStarkKey(t *testing.T) {
-	// todo
+func TestOnBoarding_CreateAccount(t *testing.T) {
+	privateKey := os.Getenv("PRIVATE_KEY")
+	if privateKey == "" {
+		log.Panic("PRIVATE_KEY env variable is not set")
+	}
+	// Derive key using private key
+	key, err := crypto.HexToECDSA(privateKey)
+	// Convert key to ethereum address
+	addr := crypto.PubkeyToAddress(key.PublicKey)
+	if err != nil {
+		log.Panic(err)
+	}
+	signerFn := func(sig []byte) ([]byte, error) {
+		return crypto.Sign(sig, key)
+	}
+	// Create OnBoarding Instance
+	ob := OnBoarding{
+		BaseClient: base.BaseClient{
+			NetworkId: constants.NetworkIdGoerli,
+		},
+		CryptoSigner: signerFn,
+		Host:         "https://api.stage.dydx.exchange",
+	}
+	// Create Account
+	account, private, err := ob.CreateAccount(addr.String())
+	if err != nil {
+		log.Panic(err)
+	}
+	log.Printf("private: %s", private)
+	log.Printf("account: %v", account)
 }

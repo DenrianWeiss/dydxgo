@@ -1,9 +1,9 @@
 package types
 
 type ApiKeyCredentials struct {
-	Key        string
-	Secret     string
-	Passphrase string
+	Key        string `json:"key"`
+	Secret     string `json:"secret"`
+	Passphrase string `json:"passphrase"`
 }
 
 type RateLimit struct {

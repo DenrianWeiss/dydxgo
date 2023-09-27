@@ -77,6 +77,8 @@ func New(options Options) Client {
 		)
 	}
 
+	clientInstance.OnBoarding.Host = options.Host
+
 	clientInstance.Private = &private.Private{
 		BaseUser:   clientInstance.BaseUser,
 		Host:       options.Host,

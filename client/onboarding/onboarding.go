@@ -17,6 +17,7 @@ import (
 
 type OnBoarding struct {
 	base.BaseClient
+	Host         string
 	CryptoSigner signer.CryptoSigner
 }
 
@@ -32,6 +33,16 @@ func (b *OnBoarding) DeriveStarkKey(ethereumAddress string) string {
 	privateKey, _ := new(big.Int).SetString(hashedSignature, 0)
 	privateKey = new(big.Int).Rsh(privateKey, 5)
 	return fmt.Sprintf("0x%s", privateKey.Text(16))
+}
+
+func (b *OnBoarding) GetDefaultApiCredentialsSignature() string {
+	message := b.CreateMessage(map[string]interface{}{"action": constants.OffChainOnboardingAction})
+	sig, err := b.SignMessage(message)
+	if err != nil {
+		log.Panic(err)
+	}
+	signature := fmt.Sprintf("0x%x", sig)
+	return signature
 }
 
 func (b *OnBoarding) RecoverDefaultApiCredentials(ethereumAddress string) *types.ApiKeyCredentials {
