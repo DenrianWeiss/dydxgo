@@ -10,7 +10,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/miguelmota/go-solidity-sha3 v0.1.1
 	github.com/satori/go.uuid v1.2.0
-	github.com/yanue/starkex v0.0.0-20230614033702-2d7a3a7e494e
+	github.com/yanue/starkex v0.0.0-20231213030154-1633c84b1bac
 )
 
 require (
