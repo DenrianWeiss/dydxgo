@@ -9,9 +9,10 @@ import (
 )
 
 var tokenAddress = map[int64]string{
-	1: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-	3: "0x8707a5bf4c2842d46b31a405ba41b858c0f876c4",
-	5: "0xF7a2fa2c2025fFe64427dd40Dc190d47ecC8B36e",
+	1:        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+	3:        "0x8707a5bf4c2842d46b31a405ba41b858c0f876c4",
+	5:        "0xF7a2fa2c2025fFe64427dd40Dc190d47ecC8B36e",
+	11155111: "0x7fC9C132268E0E414991449c003DbdB3E73E2059",
 }
 
 type Token struct {

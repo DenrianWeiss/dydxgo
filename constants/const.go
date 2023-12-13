@@ -33,6 +33,7 @@ const (
 const (
 	NetworkIdMainnet = 1
 	NetworkIdGoerli  = 5
+	NetworkIdSepolia = 11155111
 )
 
 const (

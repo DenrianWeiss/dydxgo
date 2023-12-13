@@ -28,7 +28,7 @@ func TestOnBoarding_SignMessage(t *testing.T) {
 	// Create OnBoarding Instance
 	ob := OnBoarding{
 		BaseClient: base.BaseClient{
-			NetworkId: constants.NetworkIdGoerli,
+			NetworkId: constants.NetworkIdSepolia,
 		},
 		CryptoSigner: signerFn,
 	}
@@ -65,7 +65,7 @@ func TestOnBoarding_CreateAccount(t *testing.T) {
 	// Create OnBoarding Instance
 	ob := OnBoarding{
 		BaseClient: base.BaseClient{
-			NetworkId: constants.NetworkIdGoerli,
+			NetworkId: constants.NetworkIdSepolia,
 		},
 		CryptoSigner: signerFn,
 		Host:         "https://api.stage.dydx.exchange",
