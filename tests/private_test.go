@@ -61,7 +61,7 @@ func TestPrivateApi(t *testing.T) {
 	logger := log.New(os.Stdout, "dydxgo: ", log.LstdFlags)
 	// Do OnBoarding.
 	dydxClient := client.New(client.Options{
-		NetworkId:              5,
+		NetworkId:              11155111,
 		Host:                   "https://api.stage.dydx.exchange",
 		DefaultEthereumAddress: address,
 		StarkPrivateKey:        "",
@@ -82,6 +82,12 @@ func TestPrivateApi(t *testing.T) {
 	if err != nil {
 		t.Fatal(err.Error())
 	}
+	reg, err := dydxClient.Private.GetRegistration()
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+	// Print Registration
+	log.Printf("Registration: %v", reg)
 	// Create FOK Buy order
 	po := &private.ApiOrder{
 		Market:      "ETH-USD",

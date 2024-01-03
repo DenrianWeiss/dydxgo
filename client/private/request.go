@@ -270,3 +270,16 @@ func (p *Private) GetTransfers(param *TransferQueryParam) (*TransferQueryRespons
 	}
 	return result, nil
 }
+
+func (p *Private) GetRegistration() (*RegisterResponse, error) {
+	res, err := p.get("registration", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	result := &RegisterResponse{}
+	if err := json.Unmarshal(res, result); err != nil {
+		return nil, errors.New("json parser error")
+	}
+	return result, nil
+}

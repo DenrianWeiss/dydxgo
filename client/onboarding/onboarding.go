@@ -1,17 +1,22 @@
 package onboarding
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/denrianweiss/dydxgo/client/base"
 	"github.com/denrianweiss/dydxgo/constants"
+	"github.com/denrianweiss/dydxgo/ec"
 	"github.com/denrianweiss/dydxgo/signer"
 	"github.com/denrianweiss/dydxgo/types"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	solsha3 "github.com/miguelmota/go-solidity-sha3"
+	"io"
 	"log"
 	"math/big"
+	"net/http"
 	"strings"
 )
 
@@ -77,4 +82,53 @@ func (b *OnBoarding) RecoverDefaultApiCredentials(ethereumAddress string) *types
 		Key:        keyUuid,
 		Passphrase: base64.URLEncoding.EncodeToString(passphraseBytes),
 	}
+}
+
+func (b *OnBoarding) post(endpoint string, data interface{}, ethereumAddress, onboardingSig string) (resp []byte, err error) {
+	// Marshal data to json
+	url := fmt.Sprintf("%s/v3/%s", b.Host, endpoint)
+	// Create request
+	dataJson, _ := json.Marshal(data)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(dataJson))
+	if err != nil {
+		log.Panic(err)
+	}
+	if onboardingSig == "" {
+		onboardingSig = b.GetDefaultApiCredentialsSignature()
+	}
+	// Set headers
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("DYDX-SIGNATURE", onboardingSig)
+	req.Header.Set("DYDX-ETHEREUM-ADDRESS", ethereumAddress)
+	// Send request
+	client := http.DefaultClient
+	respVal, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if respVal.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("status code: %d", respVal.StatusCode)
+	}
+	defer respVal.Body.Close()
+	// Read response
+	resp, err = io.ReadAll(respVal.Body)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (b *OnBoarding) Onboard(ethereumAddress string, onboardingParams map[string]interface{}) {
+	if onboardingParams == nil {
+		starkKey := b.DeriveStarkKey(ethereumAddress)
+		pkInt, _ := new(big.Int).SetString(starkKey, 0)
+		publicKey := ec.DerivePublicKey(pkInt)
+		pkx := fmt.Sprintf("%x", publicKey.X.Bytes())
+		pky := fmt.Sprintf("%x", publicKey.Y.Bytes())
+		onboardingParams = map[string]interface{}{
+			"starkKey":            pkx,
+			"starkKeyYCoordinate": pky,
+		}
+	}
+	b.post("onboarding", onboardingParams, ethereumAddress, "")
 }

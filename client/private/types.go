@@ -393,6 +393,10 @@ type TransferList struct {
 	ToAddress       string    `json:"toAddress"`
 }
 
+type RegisterResponse struct {
+	Signature string `json:"signature"`
+}
+
 func (o OrderQueryParam) ToParams() url.Values {
 	params := url.Values{}
 	if o.Market != "" {
