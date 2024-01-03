@@ -78,3 +78,30 @@ func TestOnBoarding_CreateAccount(t *testing.T) {
 	log.Printf("private: %s", private)
 	log.Printf("account: %v", account)
 }
+
+func TestOnBoarding_Onboard(t *testing.T) {
+	privateKey := os.Getenv("PRIVATE_KEY")
+	if privateKey == "" {
+		log.Panic("PRIVATE_KEY env variable is not set")
+	}
+	// Derive key using private key
+	key, err := crypto.HexToECDSA(privateKey)
+	// Convert key to ethereum address
+	addr := crypto.PubkeyToAddress(key.PublicKey)
+	if err != nil {
+		log.Panic(err)
+	}
+	signerFn := func(sig []byte) ([]byte, error) {
+		return crypto.Sign(sig, key)
+	}
+	// Create OnBoarding Instance
+	ob := OnBoarding{
+		BaseClient: base.BaseClient{
+			NetworkId: constants.NetworkIdSepolia,
+		},
+		CryptoSigner: signerFn,
+		Host:         "https://api.stage.dydx.exchange",
+	}
+	// Create Account
+	ob.Onboard(addr.String(), nil)
+}

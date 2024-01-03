@@ -106,7 +106,7 @@ func (b *OnBoarding) post(endpoint string, data interface{}, ethereumAddress, on
 	if err != nil {
 		return nil, err
 	}
-	if respVal.StatusCode != http.StatusOK {
+	if respVal.StatusCode < 200 || respVal.StatusCode > 300 {
 		return nil, fmt.Errorf("status code: %d", respVal.StatusCode)
 	}
 	defer respVal.Body.Close()
@@ -130,5 +130,9 @@ func (b *OnBoarding) Onboard(ethereumAddress string, onboardingParams map[string
 			"starkKeyYCoordinate": pky,
 		}
 	}
-	b.post("onboarding", onboardingParams, ethereumAddress, "")
+	post, err := b.post("onboarding", onboardingParams, ethereumAddress, "")
+	if err != nil {
+		return
+	}
+	log.Printf("post: %s", string(post))
 }
