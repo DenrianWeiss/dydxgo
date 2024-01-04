@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"github.com/denrianweiss/dydxgo/client/base"
 	"github.com/denrianweiss/dydxgo/constants"
+	"github.com/denrianweiss/dydxgo/ec"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"log"
+	"math/big"
 	"os"
 	"testing"
 )
@@ -104,4 +106,41 @@ func TestOnBoarding_Onboard(t *testing.T) {
 	}
 	// Create Account
 	ob.Onboard(addr.String(), nil)
+}
+
+func TestOnBoarding_OnBoardWithEnv(t *testing.T) {
+	derivedKey := os.Getenv("DERIVED_KEY")
+	if derivedKey == "" {
+		log.Panic("DERIVED_KEY env variable is not set")
+	}
+	ethAddress := os.Getenv("ETH_ADDRESS")
+	if ethAddress == "" {
+		log.Panic("ETH_ADDRESS env variable is not set")
+	}
+	signature := os.Getenv("SIGNATURE")
+	if signature == "" {
+		log.Panic("SIGNATURE env variable is not set")
+	}
+	// Create OnBoarding Instance
+	ob := OnBoarding{
+		BaseClient: base.BaseClient{
+			NetworkId: constants.NetworkIdSepolia,
+		},
+		Host:         "https://api.stage.dydx.exchange",
+		CryptoSigner: nil,
+	}
+	pkInt, _ := new(big.Int).SetString(derivedKey, 0)
+	publicKey := ec.DerivePublicKey(pkInt)
+	pkx := fmt.Sprintf("%x", publicKey.X.Bytes())
+	pky := fmt.Sprintf("%x", publicKey.Y.Bytes())
+	onboardingParams := map[string]interface{}{
+		"starkKey":            pkx,
+		"starkKeyYCoordinate": pky,
+	}
+	// Create Account
+	post, err := ob.post("onboarding", onboardingParams, ethAddress, signature+"00")
+	if err != nil {
+		log.Panic(err)
+	}
+	log.Printf("post: %s", string(post))
 }

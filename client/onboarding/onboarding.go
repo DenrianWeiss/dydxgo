@@ -144,15 +144,15 @@ func (b *OnBoarding) post(endpoint string, data interface{}, ethereumAddress, on
 	if err != nil {
 		return nil, err
 	}
-	if respVal.StatusCode < 200 || respVal.StatusCode > 300 {
-		return nil, fmt.Errorf("status code: %d", respVal.StatusCode)
-	}
-	defer respVal.Body.Close()
 	// Read response
 	resp, err = io.ReadAll(respVal.Body)
 	if err != nil {
 		return nil, err
 	}
+	if respVal.StatusCode < 200 || respVal.StatusCode > 300 {
+		return nil, fmt.Errorf("status code: %d", respVal.StatusCode)
+	}
+	defer respVal.Body.Close()
 	return resp, nil
 }
 

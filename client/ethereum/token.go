@@ -31,6 +31,13 @@ func (t *Token) SetAllowance(amount *big.Int, transact *bind.TransactOpts) (*typ
 	return t.token.Approve(transact, common.HexToAddress(exchangeAddress[t.NetworkId]), amount)
 }
 
+func (t *Token) SetAllowanceAsMessage(amount *big.Int) (to common.Address, payload []byte, err error) {
+	encoder, _ := abi.Erc20MetaData.GetAbi()
+	pack, err := encoder.Pack("approve", common.HexToAddress(exchangeAddress[t.NetworkId]), amount)
+
+	return common.HexToAddress(tokenAddress[t.NetworkId]), pack, err
+}
+
 func (t *Token) GetAllowance() (*big.Int, error) {
 	return t.token.Allowance(&bind.CallOpts{}, t.Address, common.HexToAddress(exchangeAddress[t.NetworkId]))
 }

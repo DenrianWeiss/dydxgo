@@ -46,6 +46,14 @@ func (e *Exchange) Deposit(amount *big.Int, publicKey string, positionId *big.In
 	return e.exchange.Deposit0(transact, e.PublicKeyToUint256(publicKey), tokenIdUint, positionId, amount)
 }
 
+func (e *Exchange) DepositAsMessage(amount *big.Int, publicKey string, positionId *big.Int) (to common.Address, payload []byte, err error) {
+	tokenIdUint, _ := big.NewInt(0).SetString(strings.TrimPrefix(tokenId[e.NetworkId], "0x"), 16)
+	encoder, _ := abi.ExchangeMetaData.GetAbi()
+	pack, err := encoder.Pack("deposit0", e.PublicKeyToUint256(publicKey), tokenIdUint, positionId, amount)
+
+	return common.HexToAddress(exchangeAddress[e.NetworkId]), pack, err
+}
+
 func (e *Exchange) GetWithdrawalBalance(publicKey string) (*big.Int, error) {
 	tokenIdUint, _ := big.NewInt(0).SetString(strings.TrimPrefix(tokenId[e.NetworkId], "0x"), 16)
 	return e.exchange.GetWithdrawalBalance(&bind.CallOpts{}, e.PublicKeyToUint256(publicKey), tokenIdUint)
@@ -59,9 +67,22 @@ func (e *Exchange) Withdraw(publicKey string, transact *bind.TransactOpts) (*typ
 	return e.exchange.Withdraw(transact, e.PublicKeyToUint256(publicKey), tokenIdUint)
 }
 
+func (e *Exchange) WithdrawAsMessage(publicKey string) (to common.Address, payload []byte, err error) {
+	tokenIdUint, _ := big.NewInt(0).SetString(strings.TrimPrefix(tokenId[e.NetworkId], "0x"), 16)
+	encoder, _ := abi.ExchangeMetaData.GetAbi()
+	pack, err := encoder.Pack("withdraw", e.PublicKeyToUint256(publicKey), tokenIdUint)
+	return common.HexToAddress(exchangeAddress[e.NetworkId]), pack, err
+}
+
 func (e *Exchange) RegisterUser(signature []byte, publicKey string, transact *bind.TransactOpts) (*types.Transaction, error) {
 	if transact.Signer == nil {
 		transact.Signer = e.ethSigner
 	}
 	return e.exchange.RegisterUser(transact, e.Address, e.PublicKeyToUint256(publicKey), signature)
+}
+
+func (e *Exchange) RegisterUserAsMessage(signature []byte, publicKey string) (to common.Address, payload []byte, err error) {
+	encoder, _ := abi.ExchangeMetaData.GetAbi()
+	pack, err := encoder.Pack("registerUser", e.Address, e.PublicKeyToUint256(publicKey), signature)
+	return common.HexToAddress(exchangeAddress[e.NetworkId]), pack, err
 }
