@@ -45,3 +45,7 @@ func (t *Token) GetAllowance() (*big.Int, error) {
 func (t *Token) GetContract() *abi.Erc20 {
 	return t.token
 }
+
+func (t *Token) GetAddress() string {
+	return tokenAddress[t.NetworkId]
+}
